@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons end>
+      <button ion-button (click)="cerrarModal()">
+          Cerrar
+      </button>
+    </ion-buttons>
+    <ion-title>Crear Post</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+    <ion-list>
+        <ion-item>
+          <ion-label fixed block>Titulo</ion-label>
+          <ion-input type="text" value="" block></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <img src="https://http2.mlstatic.com/gorra-terry-bogard-fatal-fury-kof-trucker-D_NQ_NP_727551-MLA26106118850_102017-F.webp" />
+    </ion-item>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button ion-button block icon-left>
+            <ion-icon name="photos"></ion-icon>
+            Seleccionar
+        </button>
+      </ion-col>
+      <ion-col>
+          <button ion-button block icon-left>
+              <ion-icon name="camera"></ion-icon>
+              Camara
+          </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
