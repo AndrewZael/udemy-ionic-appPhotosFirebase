@@ -9,10 +9,16 @@ import { MyApp } from './app.component'
 import { HomePage } from '../pages/home/home'
 import { SubirPage } from '../pages/subir/subir'
 
+//Pipes
+import { PipesModule } from '../Pipes/pipes.module'
+
 //Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+
+//plugins
+import { Camera } from '@ionic-native/camera'
 
 export const firebaseConfig = {
   apiKey: "AIzaSyC4ReSjk4jssMRlj43RuH03ok3uV0zv1Rw",
@@ -33,7 +39,8 @@ export const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -45,6 +52,7 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     AngularFireDatabase,
+    Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
