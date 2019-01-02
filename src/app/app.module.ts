@@ -19,6 +19,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 //plugins
 import { Camera } from '@ionic-native/camera'
+import { ImagePicker } from '@ionic-native/image-picker';
+
+
+import { CargaArchivoProvider } from '../providers/carga-archivo/carga-archivo';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyC4ReSjk4jssMRlj43RuH03ok3uV0zv1Rw",
@@ -53,7 +57,9 @@ export const firebaseConfig = {
     SplashScreen,
     AngularFireDatabase,
     Camera,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    ImagePicker,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CargaArchivoProvider
   ]
 })
 export class AppModule {}
