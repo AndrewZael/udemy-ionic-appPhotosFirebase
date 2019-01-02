@@ -9,9 +9,11 @@ import { CargaArchivoProvider } from '../../providers/carga-archivo/carga-archiv
   templateUrl: 'subir.html',
 })
 export class SubirPage {
-  public titulo: string
-  public imagenPrev: string
+
+  public titulo: string = ""
+  public imagenPrev: string = ""
   public img64:string
+
   constructor(private viewCtrl:ViewController,
               private camera: Camera,
               private imagePicker: ImagePicker,
@@ -40,7 +42,7 @@ export class SubirPage {
 
   seleccionarFoto(){
     let options:ImagePickerOptions = {
-      quality: 70,
+      quality: 40,
       outputType: 1,
       maximumImagesCount: 1
     }
@@ -59,7 +61,7 @@ export class SubirPage {
         titulo: this.titulo,
         img: this.img64
      }
-     this.cargarArchivo.cargarImagenFirebase(archivo)
+     this.cargarArchivo.cargarImagenFirebase(archivo).then(()=>this.cerrarModal())
   }
 
 }

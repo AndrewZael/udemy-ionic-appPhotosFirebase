@@ -6,7 +6,10 @@ import { ToastController } from 'ionic-angular';
 @Injectable()
 export class CargaArchivoProvider {
 
-  constructor(public toastCtrl: ToastController){
+  images:ArchivoSubir[] = []
+
+  constructor(public toastCtrl: ToastController,
+              public aFDb:AngularFireDatabase){
 
   }
 
@@ -21,7 +24,7 @@ export class CargaArchivoProvider {
 
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
                   ()=>{
-                    
+
                   }, // saber % Mbs se han subido
                   (error) => {
                     //manejo error
@@ -31,8 +34,9 @@ export class CargaArchivoProvider {
                   },
                   ()=>{
                     //Todo ok
-                    console.log('Archivo subido')
                     this.mostrarToast('Imagen cargada correctamente')
+                    let url = uploadTask.snapshot.downloadURL
+                    this.crearPost(archivo.titulo, url, nombreArchivo)
                     resolve()
                   }
               )
@@ -45,6 +49,22 @@ export class CargaArchivoProvider {
        message: message,
        duration: 2000
     }).present()
+  }
+
+  crearPost(titulo:string, url:string, nombreArchivo:string){
+      let post:ArchivoSubir = {
+            img: url,
+            titulo: titulo,
+            key: nombreArchivo
+      }
+      console.log('Llego aqui')
+      this.aFDb.object(`/post/${nombreArchivo}`).update(post).then(()=>{
+          console.log('Good')
+      },
+      (err)=>{
+        console.log('ERROR: '+ err)
+      })
+      this.images.push(post)
   }
 
 }
