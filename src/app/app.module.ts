@@ -19,6 +19,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 //plugins
 import { Camera } from '@ionic-native/camera'
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 
 import { CargaArchivoProvider } from '../providers/carga-archivo/carga-archivo';
@@ -56,6 +57,7 @@ export const firebaseConfig = {
     SplashScreen,
     AngularFireDatabase,
     Camera,
+    SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CargaArchivoProvider
   ]

@@ -4,6 +4,9 @@ import { SubirPage } from '../subir/subir'
 import { CargaArchivoProvider } from '../../providers/carga-archivo/carga-archivo'
 import { Observable } from 'rxjs/Observable'
 
+//Compartir
+import { SocialSharing } from '@ionic-native/social-sharing'
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -15,7 +18,8 @@ export class HomePage {
   //lastkey:any = ''
 
   constructor(private modalCtlr:ModalController,
-              private cargaArchivoProvider: CargaArchivoProvider) {
+              private cargaArchivoProvider: CargaArchivoProvider,
+              private socialSharing:SocialSharing) {
   }
 
   /*getData(){
@@ -34,6 +38,17 @@ export class HomePage {
       })
     })
   }*/
+
+  compartirFacebook(item:any){
+      this.socialSharing.shareViaFacebook(item.titulo, item.img, item.img).then(
+        ()=>{
+           this.cargaArchivoProvider.mostrarToast('Imagen compartida exitosamente')
+           console.log(item.titulo)
+           console.log(item.img)
+      }).catch((err)=>{
+         console.log('Error: '+ err)
+      })
+  }
 
   mostrarModal(){
     let modal = this.modalCtlr.create(SubirPage)
