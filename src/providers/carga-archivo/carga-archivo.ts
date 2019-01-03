@@ -1,17 +1,61 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import * as firebase from 'firebase'
-import { ToastController } from 'ionic-angular';
+import 'rxjs/add/operator/map'
+import { ToastController } from 'ionic-angular'
+import { Observable } from 'rxjs';
+
 
 @Injectable()
 export class CargaArchivoProvider {
 
   images:ArchivoSubir[] = []
-  url:string = ''
+  lastkey:string = null
 
   constructor(public toastCtrl: ToastController,
-              public aFDb:AngularFireDatabase){
+              public afDb:AngularFireDatabase){
+              
+                this.loadLastkey().subscribe( () => this.loadImagenes() )
 
+  }
+
+  private loadLastkey(){
+    return this.afDb.list('/post', ref=> ref.orderByKey().limitToLast(1))
+              .valueChanges()
+              .map( (post:any) => {
+                console.log(post)
+                this.lastkey = post[0].key
+                this.images.push(post[0])
+            })
+  }
+
+  loadImagenes(){
+    let promesa = new Promise( (resolve, reject) => {
+      this.afDb.list('/post', 
+          ref=>ref.limitToLast(2)
+                  .orderByKey()
+                  .endAt(this.lastkey)
+      ).valueChanges()
+       .subscribe( (posts:any)=> {
+          posts.pop()
+          if(posts.length == 0){
+            this.mostrarToast('Fin de los registros')
+            resolve(false)
+            return
+          }
+
+          this.lastkey = posts[0].key
+          for(let i = posts.length-1; i >=0; i--){
+              let post = posts[i]
+              this.images.push(post)
+          }
+          
+          resolve(true)
+
+       })
+    })
+
+    return promesa
   }
 
   cargarImagenFirebase(archivo:ArchivoSubir){
@@ -36,7 +80,7 @@ export class CargaArchivoProvider {
                   ()=>{
                     //Todo ok
                     this.mostrarToast('Imagen cargada correctamente')
-                    
+
                     uploadTask.snapshot.ref.getDownloadURL().then((downLoadUrl)=>{
                        this.crearPost(archivo.titulo, downLoadUrl, nombreArchivo)
                     })
@@ -62,12 +106,13 @@ export class CargaArchivoProvider {
             titulo: titulo,
             key: nombreArchivo
       }
-      this.aFDb.object(`/post/${nombreArchivo}`).update(post).then(()=>{
+      this.afDb.object(`/post/${nombreArchivo}`).update(post).then(()=>{
           console.log('Good')
       },
       (err)=>{
         console.log('ERROR: '+ err)
       })
+
       this.images.push(post)
   }
 

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera'
-import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker'
 import { CargaArchivoProvider } from '../../providers/carga-archivo/carga-archivo'
 
 @Component({
@@ -16,7 +15,6 @@ export class SubirPage {
 
   constructor(private viewCtrl:ViewController,
               private camera: Camera,
-              private imagePicker: ImagePicker,
               public cargarArchivo:CargaArchivoProvider) {
   }
 
@@ -26,7 +24,8 @@ export class SubirPage {
 
   mostrarCamara(){
     const options: CameraOptions = {
-      quality: 50,
+      quality: 40,
+      sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
@@ -38,22 +37,25 @@ export class SubirPage {
     }, (err) => {
         console.log('Error en camara', JSON.stringify(err))
     });
+
   }
 
   seleccionarFoto(){
-    let options:ImagePickerOptions = {
+    const optionsGallery: CameraOptions = {
       quality: 40,
-      outputType: 1,
-      maximumImagesCount: 1
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
     }
-    this.imagePicker.getPictures(options).then((results) => {
-      for (var i = 0; i < results.length; i++) {
-        this.imagenPrev = 'data:image/jpeg;base64,' + results[i]
-        this.img64 = results[i]
-      }
-    }, (err) => { 
-      console.log('Error en selector', JSON.stringify(err))
-    });
+
+    this.camera.getPicture(optionsGallery).then((imageData) => {
+      this.imagenPrev = 'data:image/jpeg;base64,' + imageData
+      this.img64 = imageData
+     }, (err) => {
+         console.log('Error en camara', JSON.stringify(err))
+     });
+
   }
 
   crearPost(){
