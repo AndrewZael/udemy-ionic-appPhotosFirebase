@@ -7,6 +7,7 @@ import { ToastController } from 'ionic-angular';
 export class CargaArchivoProvider {
 
   images:ArchivoSubir[] = []
+  url:string = ''
 
   constructor(public toastCtrl: ToastController,
               public aFDb:AngularFireDatabase){
@@ -35,8 +36,11 @@ export class CargaArchivoProvider {
                   ()=>{
                     //Todo ok
                     this.mostrarToast('Imagen cargada correctamente')
-                    let url = uploadTask.snapshot.downloadURL
-                    this.crearPost(archivo.titulo, url, nombreArchivo)
+                    
+                    uploadTask.snapshot.ref.getDownloadURL().then((downLoadUrl)=>{
+                       this.crearPost(archivo.titulo, downLoadUrl, nombreArchivo)
+                    })
+                    
                     resolve()
                   }
               )
@@ -52,12 +56,12 @@ export class CargaArchivoProvider {
   }
 
   crearPost(titulo:string, url:string, nombreArchivo:string){
+      console.log(url)
       let post:ArchivoSubir = {
             img: url,
             titulo: titulo,
             key: nombreArchivo
       }
-      console.log('Llego aqui')
       this.aFDb.object(`/post/${nombreArchivo}`).update(post).then(()=>{
           console.log('Good')
       },

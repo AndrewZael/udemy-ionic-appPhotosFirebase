@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { ModalController } from 'ionic-angular';
+import { Component } from '@angular/core'
+import { ModalController } from 'ionic-angular'
 import { SubirPage } from '../subir/subir'
 
-import { AngularFireDatabase } from '@angular/fire/database';
-import { Observable } from 'rxjs/Observable';
+import { AngularFireDatabase } from '@angular/fire/database'
+import { Observable } from 'rxjs/Observable'
 
 @Component({
   selector: 'page-home',
